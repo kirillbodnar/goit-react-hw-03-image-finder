@@ -1,4 +1,7 @@
 import { Component } from 'react';
+import { ImSearch } from 'react-icons/im';
+import { toast } from 'react-toastify';
+import s from './Searchbar.module.css';
 
 export default class Searchbar extends Component {
   state = {
@@ -7,7 +10,13 @@ export default class Searchbar extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
+
+    if (this.state.input.trim() === '') {
+      toast.error('Введите запрос');
+      return;
+    }
     this.props.onSubmit(this.state.input);
+    this.setState({ input: '' });
   };
 
   handleChange = e => {
@@ -19,16 +28,18 @@ export default class Searchbar extends Component {
 
   render() {
     return (
-      <header className="searchbar">
-        <form onSubmit={this.handleSubmit} className="form">
-          <button type="submit" className="button">
-            <span className="button-label">Search</span>
+      <header className={s.Searchbar}>
+        <form onSubmit={this.handleSubmit} className={s.form}>
+          <button type="submit" className={s.button}>
+            <ImSearch />
+            <span className={s.label}>Search</span>
           </button>
 
           <input
-            className="input"
+            className={s.input}
             type="text"
             autoComplete="off"
+            value={this.state.input}
             autoFocus
             placeholder="Search images and photos"
             onChange={this.handleChange}
