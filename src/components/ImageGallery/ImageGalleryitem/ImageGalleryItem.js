@@ -8,11 +8,15 @@ export default function ImageGalleryItem({ image, onClick }) {
 
   return (
     <li className={s.ImageGalleryItem} onClick={handleImageClick}>
-      <img src={image.webformatURL} alt={image.tag} className={s.Image} />
+      <img src={image.webformatURL} alt={image.tags} className={s.Image} />
     </li>
   );
 }
 
 ImageGalleryItem.propTypes = {
   onClick: PropTypes.func.isRequired,
+  image: PropTypes.shape({
+    webformatURL: PropTypes.string.isRequired,
+    tags: PropTypes.string.isRequired,
+  }),
 };

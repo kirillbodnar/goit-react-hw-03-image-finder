@@ -7,5 +7,7 @@ export default function ErrorMarkUp({ error }) {
 }
 
 ErrorMarkUp.propTypes = {
-  error: PropTypes.object.isRequired,
+  error: PropTypes.shape({
+    message: PropTypes.string,
+  }),
 };

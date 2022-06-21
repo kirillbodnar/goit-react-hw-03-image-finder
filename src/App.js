@@ -26,15 +26,14 @@ export class App extends Component {
     const prevPage = prevState.page;
     const { page, query } = this.state;
 
-    if (prevQuery !== query) {
-      this.setState({ page: 1, status: 'pending', gallery: [] });
+    if (prevQuery !== query || prevPage !== page) {
+      this.setState({ status: 'pending' });
 
       fetch(
         `https://pixabay.com/api/?q=${query}&page=${page}&key=19102910-cffe66986be4c018bfebf7445&image_type=photo&orientation=horizontal&per_page=12`
       )
         .then(res => {
           if (res.ok) {
-            console.log(res);
             return res.json();
           }
 
@@ -49,30 +48,32 @@ export class App extends Component {
             );
           }
 
-          this.setState(() => ({
-            gallery: images.hits,
+          this.setState(({ gallery }) => ({
+            gallery: [...gallery, ...images.hits],
             status: 'resolved',
           }));
         })
         .catch(error => this.setState({ error, status: 'error' }));
     }
 
-    if (prevPage !== page && prevQuery === query) {
-      fetch(
-        `https://pixabay.com/api/?q=${query}&page=${page}&key=19102910-cffe66986be4c018bfebf7445&image_type=photo&orientation=horizontal&per_page=12`
-      )
-        .then(res => res.json())
-        .then(images => {
-          this.setState(({ gallery }) => ({
-            gallery: [...gallery, ...images.hits],
-          }));
-        });
-    }
+    // if (prevQuery === query && prevPage !== page) {
+    //   fetch(
+    //     `https://pixabay.com/api/?q=${query}&page=${page}&key=19102910-cffe66986be4c018bfebf7445&image_type=photo&orientation=horizontal&per_page=12`
+    //   )
+    //     .then(res => res.json())
+    //     .then(images => {
+    //       this.setState(({ gallery }) => ({
+    //         gallery: [...gallery, ...images.hits],
+    //       }));
+    //     });
+    // }
   }
 
   handleSubmit = query => {
+    if (query !== this.state.query) {
+      this.setState({ gallery: [], page: 1 });
+    }
     this.setState({ query });
-    this.setState({ gallery: [] });
   };
 
   handleButtonClick = () => {
@@ -97,7 +98,7 @@ export class App extends Component {
           <Searchbar onSubmit={this.handleSubmit} />
           {status === 'error' && <ErrorMarkUp error={error} />}
 
-          {status === 'resolved' && (
+          {gallery && (
             <ImageGallery images={gallery} onClick={this.handleImageClick} />
           )}
 
