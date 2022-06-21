@@ -55,18 +55,6 @@ export class App extends Component {
         })
         .catch(error => this.setState({ error, status: 'error' }));
     }
-
-    // if (prevQuery === query && prevPage !== page) {
-    //   fetch(
-    //     `https://pixabay.com/api/?q=${query}&page=${page}&key=19102910-cffe66986be4c018bfebf7445&image_type=photo&orientation=horizontal&per_page=12`
-    //   )
-    //     .then(res => res.json())
-    //     .then(images => {
-    //       this.setState(({ gallery }) => ({
-    //         gallery: [...gallery, ...images.hits],
-    //       }));
-    //     });
-    // }
   }
 
   handleSubmit = query => {
